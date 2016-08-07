@@ -72,5 +72,5 @@ def read_js_object(code):
 
 if __name__ == "__main__":
     # test
-    print read_js_object("""var foo = {x: 10, y: "hi " + "there!"};
-                            var bar = {derp: ["herp", "it", "up", "forever"]};""")
+    print(read_js_object("""var foo = {x: 10, y: "hi " + "there!"};
+                            var bar = {derp: ["herp", "it", "up", "forever"]};"""))

@@ -1,4 +1,5 @@
 import wgetter
+from __builtin__ import unicode
 
 from mutagen.mp3 import MP3
 from mutagen.id3 import TIT2
@@ -23,7 +24,7 @@ class BandcampDownloader():
         self.overwrite = overwrite
 
     def start(self, album):
-        print "Starting download process."
+        print("Starting download process.")
         self.download_album(album)
 
     def template_to_path(self, track):
@@ -60,12 +61,15 @@ class BandcampDownloader():
 
             if not self.overwrite and os.path.isfile(filename):
                 re_encoded_track_title = track['title'].encode('utf-8')
-                print "Skipping track {} - {} as it's already downloaded, use --overwrite to overwrite existing files".format(track['track'], re_encoded_track_title)
+                print(
+                    "Skipping track {} - {} as it's already downloaded, use --overwrite to overwrite existing files".format(
+                        track['track'], re_encoded_track_title))
                 continue
 
             if not track.get('url'):
                 re_encoded_track_title = track['title'].encode('utf-8')
-                print "Skipping track {} - {} as it is not available".format(track['track'], re_encoded_track_title)
+                print("Skipping track {} - {} as it is not available".format(
+                    track['track'], re_encoded_track_title))
                 continue
 
             try:
@@ -77,20 +81,20 @@ class BandcampDownloader():
                 os.rename(tmp_file, filename)
                 self.write_id3_tags(filename, track_meta)
             except Exception as e:
-                print e
-                print "Downloading failed.."
+                print(e)
+                print("Downloading failed..")
                 return False
         try:
             tmp_art_file = wgetter.download(album['art'], outdir=dirname)
             os.rename(tmp_art_file, dirname + "/cover.jpg")
         except Exception as e:
-            print e
-            print "Couldn't download album art."
+            print(e)
+            print("Couldn't download album art.")
 
         return True
 
     def write_id3_tags(self, filename, meta):
-        print "Encoding . . . "
+        print("Encoding . . . ")
 
         audio = MP3(filename)
         audio["TIT2"] = TIT2(encoding=3, text=["title"])
@@ -104,4 +108,4 @@ class BandcampDownloader():
         audio["date"] = meta['date']
         audio.save()
 
-        print "Done encoding . . . "
+        print("Done encoding . . . ")
